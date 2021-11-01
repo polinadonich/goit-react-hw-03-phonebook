@@ -33,23 +33,7 @@ class ContactForm extends Component {
     }
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { name, number } = this.state;
-    console.log(this.props.contacts);
 
-    const isContactsIncludes = this.props.contacts.find(
-      (contact) => contact.name === name
-    );
-
-    if (isContactsIncludes) {
-      return alert(`${name}is alredy in contacts`);
-    } else {
-      this.props.addContact(name, number);
-
-      this.setState({ name: "", number: "" });
-    }
-  };
 
   render() {
     const { name, number } = this.state;
