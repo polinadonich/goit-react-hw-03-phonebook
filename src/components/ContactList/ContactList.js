@@ -1,6 +1,6 @@
-import ContactElement from "../ContactElement";
-import s from "./ContactList.module.css";
-import PropTypes from "prop-types";
+import ContactElement from '../ContactElement';
+import s from './ContactList.module.css';
+import PropTypes from 'prop-types';
 
 function ContactList({ contacts, deleteContact }) {
   console.log(contacts);
@@ -21,7 +21,7 @@ function ContactList({ contacts, deleteContact }) {
 }
 
 ContactList.prototype = {
-  contacts: PropTypes.array.isRequired,
+  contacts: PropTypes.arrayOf(PropTypes.object),
   deleteContact: PropTypes.func.isRequired,
 };
 

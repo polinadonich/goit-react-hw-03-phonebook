@@ -1,68 +1,73 @@
-import { Component } from "react";
-import { v4 as uuidv4 } from "uuid";
-import contacts from "./components/contacts.json";
-import ContactList from "./components/ContactList";
-import ContactForm from "./components/ContactForm";
-import Filter from "./components/Filter";
-import s from "./components/Phonebook.module.css";
+import { Component } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+// import contacts from "./components/contacts.json";
+import ContactList from './components/ContactList';
+import ContactForm from './components/ContactForm';
+import Filter from './components/Filter';
+import s from './components/Phonebook.module.css';
 
 class App extends Component {
   state = {
-    contacts: contacts,
-    filter: "",
+    contacts: [],
+    filter: '',
   };
 
- componentDidMount() {
-    const contacts = localStorage.getItem("contacts");
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(contacts);
+    //  console.log(parsedContacts)
     if (parsedContacts) {
       this.setState({ contacts: parsedContacts });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+  componentDidUpdate(prevProps, PrevState) {
+    if (this.state.contacts !== PrevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
   }
 
-  addContact = (name, number) => {
+  addContact = ({ name, number }) => {
+    if (this.state.contacts.some(contact => contact.name.includes(name))) {
+      alert(`контакт ${name} уже существует`);
+      return;
+    }
     const contact = {
       id: uuidv4(),
-      name: name,
-      number: number,
+      name,
+      number,
     };
 
-    this.setState((prevState) => ({
+    this.setState(prevState => ({
       contacts: [contact, ...prevState.contacts],
     }));
   };
 
-  changeFilter = (e) => {
+  changeFilter = e => {
     console.log(e.currentTarget.value);
     this.setState({ filter: e.currentTarget.value });
   };
 
   getVisibleContact = () => {
     const { filter, contacts } = this.state;
-    console.log(contacts);
+    // console.log(contacts);
     const normalizeTodo = filter.toLowerCase();
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(normalizeTodo)
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizeTodo),
     );
   };
 
-  deleteContact = (todoId) => {
-    this.setState((prevState) => ({
-      contacts: prevState.contacts.filter((contact) => contact.id !== todoId),
+  deleteContact = todoId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== todoId),
     }));
   };
 
-    handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault();
     const { name, number } = this.state;
     const isContactsIncludes = this.props.contacts.find(
-      (contact) => contact.name === name
+      contact => contact.name === name,
     );
 
     if (isContactsIncludes) {
@@ -70,7 +75,7 @@ class App extends Component {
     } else {
       this.props.addContact(name, number);
 
-      this.setState({ name: "", number: "" });
+      this.setState({ name: '', number: '' });
     }
   };
 
@@ -81,10 +86,7 @@ class App extends Component {
       <div className={s.container}>
         <div className={s.phonebookContainer}>
           <h1>Phonebook</h1>
-          <ContactForm
-            addContact={this.addContact}
-            contacts={this.state.contacts}
-          />
+          <ContactForm addContact={this.addContact} />
         </div>
 
         <div className={s.contactsContainer}>

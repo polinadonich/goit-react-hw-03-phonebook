@@ -1,39 +1,35 @@
-import { Component } from "react";
-import s from "./ContactForm.module.css";
-import PropTypes from "prop-types";
+import { Component } from 'react';
+import s from './ContactForm.module.css';
+import PropTypes from 'prop-types';
 
 class ContactForm extends Component {
   static defaultProps = {
-    contacts: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.number.isRequired,
-      }).isRequired
-    ),
     addContact: PropTypes.func.isRequired,
   };
 
   state = {
-    name: "",
-    number: "",
+    name: '',
+    number: '',
   };
 
-  handleChange = (e) => {
-    console.log(e.currentTarget.name);
-    if (e.currentTarget.name === "name") {
+  handleChange = e => {
+    if (e.currentTarget.name === 'name') {
       this.setState({
         name: e.currentTarget.value,
       });
     }
-    if (e.currentTarget.name === "number") {
+    if (e.currentTarget.name === 'number') {
       this.setState({
         number: e.currentTarget.value,
       });
     }
   };
 
-
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.addContact(this.state);
+    this.setState({ name: '', number: '' });
+  };
 
   render() {
     const { name, number } = this.state;
